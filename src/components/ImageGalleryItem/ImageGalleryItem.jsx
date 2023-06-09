@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Modal } from 'components/Modal/Modal';
-
+import  Modal from 'components/Modal/Modal';
 
 const ImageGalleryItem = ({ item }) => {
   const { largeImageURL, tags, webformatURL } = item;
@@ -23,8 +22,8 @@ const ImageGalleryItem = ({ item }) => {
         <Modal onModalClose={toggleModal}>
           {
             <>
-              <ModalPicture src={largeImageURL} alt={tags} />
-              <ModalDescr>{tags}</ModalDescr>
+              <img src={largeImageURL} alt={tags} />
+              <p>{tags}</p>
             </>
           }
         </Modal>
@@ -39,7 +38,6 @@ ImageGalleryItem.propTypes = {
     webformatURL: PropTypes.string.isRequired,
     largeImageURL: PropTypes.string.isRequired,
   }).isRequired,
-  onImageClick: PropTypes.func.isRequired,
 };
 
 export default ImageGalleryItem;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -6,46 +6,56 @@ import { ModalBackdrop, ModalContent } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 
- class Modal extends Component {
-  static propTypes = {
-    modalData: PropTypes.shape({
-      largeImageURL: PropTypes.string.isRequired,
-      tags: PropTypes.string.isRequired,
-    }),
-    onModalClose: PropTypes.func,
-  };
+ const Modal = ({ onModalClose, children }) => {
+ 
+ useEffect(() => {
+   const handleKeyDown = e => {
+     if (e.code === `Escape`) {
+       onModalClose();
+     }
+   };
+   window.addEventListener('keydown', handleKeyDown);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+   return () => window.removeEventListener('keydown', handleKeyDown);
+ }, [onModalClose]);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleBackdropeClick);
-  }
+ const handleBackdropeClick = e => {
+   if (e.target === e.currentTarget) {
+     onModalClose();
+   }
+ };
+ // componentDidMount() {
+ //   window.addEventListener('keydown', this.handleKeyDown);
+ // }
 
-  handleKeyDown = e => {
-    if (e.code === `Escape`) {
-      this.props.onModalClose();
-    }
-  };
+ // componentWillUnmount() {
+ //   window.removeEventListener('keydown', this.handleBackdropeClick);
+ // }
 
-  handleBackdropeClick = e => {
-    if (e.target === e.currentTarget) {
-      this.props.onModalClose();
-    }
-  };
+  //handleKeyDown = e => {
+  //  if (e.code === `Escape`) {
+  //    this.props.onModalClose();
+  //  }
+ // };
 
-  render() {
-    const { largeImageURL, tags } = this.props.modalData;
+ // handleBackdropeClick = e => {
+  //  if (e.target === e.currentTarget) {
+  //    this.props.onModalClose();
+  //  }
+ // };
+
+ //   const { largeImageURL, tags } = this.props.modalData;
 
     return createPortal(
-      <ModalBackdrop onClick={this.handleBackdropeClick}>
-        <ModalContent>
-          <img src={largeImageURL} alt={tags} />
-        </ModalContent>
+      <ModalBackdrop onClick={handleBackdropeClick}>
+        <ModalContent>{children}</ModalContent>
       </ModalBackdrop>,
       modalRoot
     );
   }
-}
 export default Modal;
+
+Modal.propTypes = {
+  children: PropTypes.node,
+  onModalClose: PropTypes.func,
+};
