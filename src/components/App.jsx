@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { notifyOptions } from 'notify/notify';
+
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -8,8 +10,17 @@ export const App = () => {
   const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(1);
 
- const handleSubmit = e => {
-   setSearchText(e.target.value);
+ const handleSubmit = value => {
+    if (value === searchText) {
+      toast(
+        `We already found images for ${value.toUpperCase()}.
+         Please, enter another phrase`,
+        notifyOptions
+      );
+      return;
+    }
+    setSearchText(value);
+    setPage(1);
  };
 
   const handleLoadMore = () => {

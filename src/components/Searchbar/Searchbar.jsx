@@ -13,7 +13,7 @@ const [value, setValue] = useState('');
  const onChangeInput = ({ target: { value } }) => {
     setValue(value.toLowerCase());
   };
- const  onFormSubmit = evt => {
+ const onFormSubmit = evt => {
     evt.preventDefault();
     if (value.trim() === '') {
       return toast.error('Please enter key words for search', notifyOptions);
