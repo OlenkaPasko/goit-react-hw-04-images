@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import Button from 'components/Button/Button';
@@ -10,57 +10,66 @@ import Modal from 'components/Modal/Modal';
 
 import PropTypes from 'prop-types';
 
-class ImageGallery extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-  };
+const ImageGallery = ({ value, page, onLoadMore })=> {
+// state = {
+//   value: '',
+//   images: [],
+//   error: null,
+//   isLoading: false,
+//
+//   page: 1,
+//   totalPages: 0,
+//
+//   isShowModal: false,
+//   modalData: { tags: '' },
+// };
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  state = {
-    value: '',
-    images: [],
-    error: null,
-    isLoading: false,
-
-    page: 1,
-    totalPages: 0,
-
-    isShowModal: false,
-    modalData: { tags: '' },
-  };
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.value !== nextProps.value) {
-      return { page: 1, value: nextProps.value };
+  const [totalPages, setTotalPages] = useState(0);
+  
+//  static getDerivedStateFromProps(nextProps, prevState) {
+//    if (prevState.value !== nextProps.value) {
+//      return { page: 1, value: nextProps.value };
+//    }
+//    return null;
+//  }
+useEffect(() => {
+    // якщо немає пошукового запиту - пошук не відбувається
+    if (!value) {
+      return;
     }
-    return null;
-  }
+    // при новому запиті - запит відбувається з 1 сторінки та попередній масив зображень обнуляється
+    if (page === 1) {
+      setImages([]);
+    }
+  
+  return null;
+  
+ //onentDidUpdate(prevProps, prevState) {
+ //nst { page } = this.state;
+ //nst prevValue = prevProps.value;
+ //nst nextValue = this.props.value;
+ 
+ // повторний запит, якщо вже таке слово було введене
 
-  componentDidUpdate(prevProps, prevState) {
-    const { page } = this.state;
-    const prevValue = prevProps.value;
-    const nextValue = this.props.value;
-
-    // повторний запит, якщо вже таке слово було введене
-
-    if (prevValue !== nextValue || prevState.page !== page) {
-      this.setState({ isLoading: true });
+  //  if (prevValue !== nextValue || prevState.page !== page) {
+    //  this.setState({ isLoading: true });
       // чи є помилка, якщо є - записуємо null
-      if (this.state.error) {
-        this.setState({ error: null });
-      }
-      api
-        .fetchAPI(nextValue, page)
-        .then(images => {
-          this.setState(prevState => ({
-            images:
-              page === 1 ? images.hits : [...prevState.images, ...images.hits],
+    //  if (this.state.error) {
+    //    this.setState({ error: null });
+    //  }
+  api
+    .fetchAPI(nextValue, page)
+    .then(images => {
+      setImages(prevState => [...prevState.images, ...images.hits],
 
-            totalPages: Math.floor(images.totalHits / 12),
-          }));
+        setTotalPages(Math.floor(images.totalHits / 12))
         })
-        .catch(error => this.setState({ error }))
+    .catch(error => setError(error);
         .finally(() => {
-          this.setState({ isLoading: false });
+          setIsLoading({ isLoading: false });
         });
     }
   }
@@ -93,7 +102,6 @@ class ImageGallery extends Component {
               />
             ))}
           </Ul>
-          
         )}
         <Button onClick={this.handleLoadMore}>Load More</Button>
         {isShowModal && (
@@ -104,3 +112,8 @@ class ImageGallery extends Component {
   }
 }
 export default ImageGallery;
+ImageGallery.propTypes = {
+  value: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
+};
