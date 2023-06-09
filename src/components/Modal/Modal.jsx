@@ -24,29 +24,7 @@ const modalRoot = document.querySelector('#modal-root');
      onModalClose();
    }
  };
- // componentDidMount() {
- //   window.addEventListener('keydown', this.handleKeyDown);
- // }
-
- // componentWillUnmount() {
- //   window.removeEventListener('keydown', this.handleBackdropeClick);
- // }
-
-  //handleKeyDown = e => {
-  //  if (e.code === `Escape`) {
-  //    this.props.onModalClose();
-  //  }
- // };
-
- // handleBackdropeClick = e => {
-  //  if (e.target === e.currentTarget) {
-  //    this.props.onModalClose();
-  //  }
- // };
-
- //   const { largeImageURL, tags } = this.props.modalData;
-
-    return createPortal(
+    return createPortal (
       <ModalBackdrop onClick={handleBackdropeClick}>
         <ModalContent>{children}</ModalContent>
       </ModalBackdrop>,

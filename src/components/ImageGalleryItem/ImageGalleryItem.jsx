@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import  Modal from 'components/Modal/Modal';
+import Modal from 'components/Modal/Modal';
 
 const ImageGalleryItem = ({ item }) => {
   const { largeImageURL, tags, webformatURL } = item;
+  
   const [showModal, setShowModal] = useState(false);
+  
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -20,12 +22,10 @@ const ImageGalleryItem = ({ item }) => {
       </li>
       {showModal && (
         <Modal onModalClose={toggleModal}>
-          {
             <>
               <img src={largeImageURL} alt={tags} />
               <p>{tags}</p>
             </>
-          }
         </Modal>
       )}
     </>
