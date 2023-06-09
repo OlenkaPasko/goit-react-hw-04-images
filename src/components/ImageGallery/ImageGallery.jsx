@@ -6,21 +6,12 @@ import { Loader } from '../Loader/Loader';
 import api from 'services/services';
 
 import { Ul } from './ImageGallery.styled';
-//import Modal from 'components/Modal/Modal';
-
 import PropTypes from 'prop-types';
 
 const ImageGallery = ({ value, page, onLoadMore, spinner }) => {
-  //   isShowModal: false,
-  //   modalData: { tags: '' }
-
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const [totalPages, setTotalPages] = useState(0);
-
-  // const[showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     //пошук не відбувається
@@ -36,21 +27,10 @@ const ImageGallery = ({ value, page, onLoadMore, spinner }) => {
       .then(images => {
         const collection = images.hits;
         setImages(prevState => [...prevState, ...collection]);
-        //setTotalPages(Math.floor(images.totalHits / 12));
       })
       .catch(error => setError(error));
     setIsLoading(false);
   }, [value, page, onLoadMore]);
-
-  // const setModalData = modalData => {
-  //   this.setState({ modalData, showModal: true });
-  //};
-
-  //  const handleModalClose = () => {
-  //   this.setState({ showModal: false });
-  // };
-  //const { images, spinner, isLoading, error, isShowModal, modalData }
-
   return (
     <>
       {spinner && <Loader />}
