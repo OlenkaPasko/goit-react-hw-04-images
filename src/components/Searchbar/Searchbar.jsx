@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
@@ -7,29 +7,25 @@ import { notifyOptions } from 'notify/notify';
 import { Header, SearchForm, SearchInput, SearchBtn } from './Searchbar.styled';
 import { FaSistrix } from 'react-icons/fa';
 
-class Searchbar extends Component {
-  state = {
-    value: '',
+const Searchbar = ({ onSubmit }) => {
+const [value, setValue] = useState('');
+ 
+ const onChangeInput = ({ target: { value } }) => {
+    setValue(value.toLowerCase());
   };
-  onChangeInput = evt => {
-    const value = evt.target.value.toLowerCase();
-    this.setState({ value });
-  };
-  onFormSubmit = evt => {
-    //const { value } = this.state;
+ const  onFormSubmit = evt => {
     evt.preventDefault();
-    if (this.state.value.trim() === '') {
+    if (value.trim() === '') {
       return toast.error('Please enter key words for search', notifyOptions);
     }
     //HTTP запит
-    this.props.onSubmit(this.state.value);
-    this.setState({ value: '' });
+   onSubmit(value);
+   setValue('');
   };
 
-  render() {
     return (
       <Header>
-        <SearchForm onSubmit={this.onFormSubmit}>
+        <SearchForm onSubmit={onFormSubmit}>
           <SearchBtn>
             <FaSistrix size="24" />
           </SearchBtn>
@@ -38,14 +34,13 @@ class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            onChange={this.onChangeInput}
-            value={this.state.value}
+            onChange={onChangeInput}
+            value={value}
           />
         </SearchForm>
       </Header>
     );
   }
-}
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
