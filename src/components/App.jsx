@@ -12,12 +12,12 @@ export const App = () => {
 
  const handleSubmit = value => {
     if (value === searchText) {
-      toast(
-        `We already found images for ${value.toUpperCase()}.
+     toast(
+        `We already found images for ${value}.
          Please, enter another phrase`,
         notifyOptions
       );
-      return;
+return;
     }
     setSearchText(value);
     setPage(1);

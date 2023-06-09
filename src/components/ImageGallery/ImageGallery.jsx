@@ -10,7 +10,7 @@ import { Ul } from './ImageGallery.styled';
 
 import PropTypes from 'prop-types';
 
-const ImageGallery = ({  value, page, onLoadMore, spinner }) => {
+const ImageGallery = ({ value, page, onLoadMore, spinner }) => {
   //   isShowModal: false,
   //   modalData: { tags: '' }
 
@@ -18,9 +18,9 @@ const ImageGallery = ({  value, page, onLoadMore, spinner }) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [totalPages, setTotalPages] = useState(0);
+  // const [totalPages, setTotalPages] = useState(0);
 
- // const[showModal, setShowModal] = useState(false);
+  // const[showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     //пошук не відбувається
@@ -34,20 +34,21 @@ const ImageGallery = ({  value, page, onLoadMore, spinner }) => {
     api
       .fetchAPI(value, page)
       .then(images => {
-       // setImages(prevState => [...prevState.images, ...images.hits]);
-        setTotalPages(Math.floor(images.totalHits / 12));
+        const collection = images.hits;
+        setImages(prevState => [...prevState, ...collection]);
+        //setTotalPages(Math.floor(images.totalHits / 12));
       })
       .catch(error => setError(error));
     setIsLoading(false);
   }, [value, page, onLoadMore]);
 
- // const setModalData = modalData => {
- //   this.setState({ modalData, showModal: true });
+  // const setModalData = modalData => {
+  //   this.setState({ modalData, showModal: true });
   //};
 
-//  const handleModalClose = () => {
- //   this.setState({ showModal: false });
- // };
+  //  const handleModalClose = () => {
+  //   this.setState({ showModal: false });
+  // };
   //const { images, spinner, isLoading, error, isShowModal, modalData }
 
   return (
@@ -55,23 +56,22 @@ const ImageGallery = ({  value, page, onLoadMore, spinner }) => {
       {spinner && <Loader />}
       {error && <p>Whoops, something went wrong: {error.message}</p>}
       {isLoading && <p>Loading...</p>}
-      {images.length > 0 &&
-        totalPages(
-          <Ul>
-            {images.map(image => (
-              <ImageGalleryItem key={image.id} item={image} />
-            ))}
-          </Ul>
-        )}
-       <Button onClick={onLoadMore}>Load More</Button>
+      {images.length > 0 && (
+        <Ul>
+          {images.map(image => (
+            <ImageGalleryItem key={image.id} item={image} />
+          ))}
+        </Ul>
+      )}
+      <Button onClick={onLoadMore}>Load More</Button>
     </>
   );
 };
-    
+
 export default ImageGallery;
 
 ImageGallery.propTypes = {
-   value: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
   onLoadMore: PropTypes.func.isRequired,
 };

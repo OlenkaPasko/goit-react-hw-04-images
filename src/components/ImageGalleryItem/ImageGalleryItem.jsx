@@ -1,22 +1,37 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { Modal } from 'components/Modal/Modal';
 
-const ImageGalleryItem = ({ item, onImageClick }) => {
+
+const ImageGalleryItem = ({ item }) => {
   const { largeImageURL, tags, webformatURL } = item;
-
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
   return (
-    <li
-      onClick={e => {
-        e.preventDefault();
-        onImageClick({ largeImageURL, tags });
-      }}
-    >
-      <div>
-        <img src={webformatURL} alt={tags} loading="lazy" />
-      </div>
-    </li>
+    <>
+      <li>
+        <img
+          onClick={toggleModal}
+          src={webformatURL}
+          alt={tags}
+          loading="lazy"
+        />
+      </li>
+      {showModal && (
+        <Modal onModalClose={toggleModal}>
+          {
+            <>
+              <ModalPicture src={largeImageURL} alt={tags} />
+              <ModalDescr>{tags}</ModalDescr>
+            </>
+          }
+        </Modal>
+      )}
+    </>
   );
 };
-
 
 ImageGalleryItem.propTypes = {
   item: PropTypes.shape({
