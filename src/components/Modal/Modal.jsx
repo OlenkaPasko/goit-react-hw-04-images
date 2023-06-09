@@ -6,31 +6,30 @@ import { ModalBackdrop, ModalContent } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 
- const Modal = ({ onModalClose, children }) => {
- 
- useEffect(() => {
-   const handleKeyDown = e => {
-     if (e.code === `Escape`) {
-       onModalClose();
-     }
-   };
-   window.addEventListener('keydown', handleKeyDown);
+const Modal = ({ onModalClose, children }) => {
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === `Escape`) {
+        onModalClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
 
-   return () => window.removeEventListener('keydown', handleKeyDown);
- }, [onModalClose]);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onModalClose]);
 
- const handleBackdropeClick = e => {
-   if (e.target === e.currentTarget) {
-     onModalClose();
-   }
- };
-    return createPortal (
-      <ModalBackdrop onClick={handleBackdropeClick}>
-        <ModalContent>{children}</ModalContent>
-      </ModalBackdrop>,
-      modalRoot
-    );
-  }
+  const handleBackdropeClick = e => {
+    if (e.target === e.currentTarget) {
+      onModalClose();
+    }
+  };
+  return createPortal(
+    <ModalBackdrop onClick={handleBackdropeClick}>
+      <ModalContent>{children}</ModalContent>
+    </ModalBackdrop>,
+    modalRoot
+  );
+};
 export default Modal;
 
 Modal.propTypes = {
