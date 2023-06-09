@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import { ToastContainer} from 'react-toastify';
+import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 
-export class App extends Component {
-  state = {
-    searchText: '',
-  };
+export const App = () => {
+  const [searchText, setSearchText] = useState('');
+  const [page, setPage] = useState(1);
 
-  handleSubmit = searchText => {
-    this.setState({ searchText });
-  };
+ const handleSubmit = e => {
+   setSearchText(e.target.value);
+ };
 
-  render() {
-    const { searchText } = this.state;
-
+  const handleLoadMore = () => {
+  setPage(prevSate => prevSate + 1);
+};
     return (
       <>
-        <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery value={searchText} />
+        <Searchbar onSubmit={handleSubmit} />
+        <ImageGallery
+          value={searchText}
+          page={page}
+          onLoadMore={handleLoadMore}
+        />
         <ToastContainer autoClose={3000} />
       </>
     );
   }
-}
